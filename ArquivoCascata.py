@@ -34,6 +34,7 @@ class ArquivoCascata():
     def __init__(self, lists: list = []) -> None:
         self._sequencias = map(SequenciaCascata, lists)
         self._writeOps = 0
+        self._congelado = False
     
     @staticmethod
     def converteArquivo(arquivo: Arquivo)->'ArquivoCascata':
@@ -53,7 +54,17 @@ class ArquivoCascata():
     def dequeue(self)->int: #Retorna a primeira sequência do arquivo
         if len(self._sequencias) == 0:
             raise IndexError("Houve a tentativa de remover a primeira sequência de um arquivo vazio")
-        return self._sequencias.pop(0)
+        value = self._sequencias.pop(0)
+
+    def congela(self)->None:
+        if self._congelado:
+            raise ValueError("Tentativa de congelar arquivo já congelado")
+        self._congelado = True
+
+    def descongela(self)->None:
+        if not self._congelado:
+            raise ValueError("Tentativa de descongelar arquivo não congelado")
+        self._congelado = False
     
     def __str__(self)->str:
         string=""
