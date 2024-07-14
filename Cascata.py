@@ -74,11 +74,7 @@ class RAMCascata:
             minVal = None #Reseta o menor valor
             minIndex = None #Reseta o índice da lista com o menor valor
         self.memoria = seq #Substitui a memória principal pela sequência final
-        return seq
-                
-                
-                
-            
+        return seq                  
 
 class Cascata:
     def __init__(self, arquivos: list, ramSize: int, memoriaInfinita:bool = False)->None:
@@ -92,8 +88,7 @@ class Cascata:
         string =  f"fase {self.fase} {self.avgSeqSize:.2f}"
         for i in range(len(self.arquivos)):
             arq = self.arquivos[i]
-            string += f" {arq.writeOps}"
-        
+            string += f"{i+1}: {arq}"
 
     @property
     def avgSeqSize(self) -> float: #Retorna o valor da função beta, que é a quantidade de registros dividido pela quantidade de sequências vezes o tamanho da memória principal

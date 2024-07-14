@@ -42,6 +42,25 @@ class ArquivoCascata():
         arq._writeOps = arquivo.writeOps
         return arq
     
+    def append(self,value:int)->None: #Adiciona um valor à última sequência do arquivo, ou cria uma nova sequência com o valor caso o arquivo esteja vazio
+        if len(self._sequencias)>0:
+            self._sequencias[-1].append(value)
+            self._writeOps += 1
+        else:
+            self._sequencias.append(SequenciaCascata([value]))
+            self._writeOps += 1
+
+    def dequeue(self)->int: #Retorna a primeira sequência do arquivo
+        if len(self._sequencias) == 0:
+            raise IndexError("Houve a tentativa de remover a primeira sequência de um arquivo vazio")
+        return self._sequencias.pop(0)
+    
+    def __str__(self)->str:
+        string=""
+        for seq in self._sequencias:
+            string += str(seq)
+        return string
+    
     @property
     def sequencias(self)->list:
         return self._sequencias
@@ -62,16 +81,3 @@ class ArquivoCascata():
     @property
     def writeOps(self)->int:
         return self._writeOps
-    
-    def append(self,value:int)->None: #Adiciona um valor à última sequência do arquivo, ou cria uma nova sequência com o valor caso o arquivo esteja vazio
-        if len(self._sequencias)>0:
-            self._sequencias[-1].append(value)
-            self._writeOps += 1
-        else:
-            self._sequencias.append(SequenciaCascata([value]))
-            self._writeOps += 1
-
-    def dequeue(self)->int: #Retorna a primeira sequência do arquivo
-        if len(self._sequencias) == 0:
-            raise IndexError("Houve a tentativa de remover a primeira sequência de um arquivo vazio")
-        return self._sequencias.pop(0)
