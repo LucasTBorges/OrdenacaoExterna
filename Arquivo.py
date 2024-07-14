@@ -1,11 +1,11 @@
 class Arquivo:
     def __init__(self):
         self.lists = []
-        self.wrightOps = 0
+        self.writeOps = 0
 
     def addList(self, list: list)->None:
         self.lists.append(list)
-        self.wrightOps += len(list)
+        self.writeOps += len(list)
 
     def addElement(self, elemento: int)->None:
         self.lists[-1].append(elemento)
