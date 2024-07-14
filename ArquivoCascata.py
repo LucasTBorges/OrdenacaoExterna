@@ -5,7 +5,7 @@ class SequenciaCascata():
         self._sequencia = sequencia
     
     def __len__(self)->int:
-        n = 0
+        return len(self._sequencia)
     
     def __getitem__(self, index: int)->int:
         return self._sequencia[index]
@@ -45,6 +45,13 @@ class ArquivoCascata():
     @property
     def sequencias(self)->list:
         return self._sequencias
+
+    @property
+    def qtdRegistros(self)->int:
+        n = 0
+        for seq in self._sequencias:
+            n += len(seq)
+        return n
     
     @property
     def qtdSequencias(self)->int: #Retorna a quantidade de sequências não vazias
@@ -56,7 +63,7 @@ class ArquivoCascata():
     def writeOps(self)->int:
         return self._writeOps
     
-    def append(self,value)->None: #Adiciona um valor à última sequência do arquivo, ou cria uma nova sequência com o valor caso o arquivo esteja vazio
+    def append(self,value:int)->None: #Adiciona um valor à última sequência do arquivo, ou cria uma nova sequência com o valor caso o arquivo esteja vazio
         if len(self._sequencias)>0:
             self._sequencias[-1].append(value)
             self._writeOps += 1
