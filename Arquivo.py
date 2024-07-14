@@ -1,9 +1,17 @@
 class Arquivo:
     def __init__(self):
-        self.listas = []
-        self.operacoesDeEscrita = 0
+        self.lists = []
+        self.wrightOps = 0
 
-    def adicionarLista(self, lista):
-        self.listas.append(lista)
+    def addList(self, list: list)->None:
+        self.lists.append(list)
+        self.wrightOps += len(list)
 
+    def addElement(self, elemento: int)->None:
+        self.lists[-1].append(elemento)
+
+    def getListByIndex(self, indice: int)->list:
+        return self.lists[indice]
     
+    def getLists(self)->list:
+        return self.lists
