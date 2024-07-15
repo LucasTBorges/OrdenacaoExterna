@@ -87,6 +87,7 @@ class Cascata:
     def run(self)->str: #Executa a ordenação
         while not self.completo:
             self.cascatear()
+        self.output += f"\nfinal {self.calcEsforco():.2f}"
         return self.output
 
     def strFase(self)->str:
