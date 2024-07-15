@@ -1,3 +1,5 @@
+from ArquivoCascata import SequenciaCascata, ArquivoCascata
+
 class RAMCascata:
     def __init__(self, ramSize: int, memoriaInfinita:bool = False)->None:
         self._size = ramSize #Tamanho da memória principal
@@ -41,10 +43,15 @@ class RAMCascata:
             raise IndexError(f"Houve a tentativa de adicionar um elemento ({elemento}) a uma memória cheia")
         self.memoria.append(elemento)
 
-    def appendList(self, lista: list)->None:
+    def appendList(self, lista: list|SequenciaCascata)->None:
+        if lista is None:
+            raise ValueError("Houve a tentativa de adicionar uma lista nula à memória principal")
         if not self.memoriaInfinita and len(lista)+self.qtdRegistros > self.size:
             raise IndexError(f"Tentativa de inserir lista que não caberia na memória principal.\nA memória principal ({self.qtdRegistros} espaços ocupados de {self.size}) não comportaria a adição da lista de tamanho {len(lista)}")
-        self.memoria.append(lista)
+        if isinstance(lista, SequenciaCascata):
+            self.memoria.append(lista)
+        else:
+            self.memoria.append(SequenciaCascata(lista))
 
     def intercala(self)->list: #Intercala as listas da memória principal em uma única lista ordenada TODO: Otimizar intercalação usando heap mínima no lugar de ponteiros
         for list in self.memoria:
@@ -85,6 +92,7 @@ class Cascata:
         self._output = "" #String de saída
 
     def run(self)->str: #Executa a ordenação
+        self.addToOutput()
         while not self.completo:
             self.cascatear()
         self.output += f"\nfinal {self.calcEsforco():.2f}"
@@ -95,6 +103,7 @@ class Cascata:
         for i in range(len(self.arquivos)):
             arq = self.arquivos[i]
             if not arq.isEmpty:
+                string += "\n"
                 string += f"{i+1}: {arq}"
         return string
 
@@ -128,7 +137,7 @@ class Cascata:
                 raise Exception("Tentativa de executar cascata falhou pois não haviam arquivos disponíveis para intercalar, apesar da verificação de faseCompleta ter indicado o contrário")
             while (all([not arq.isEmpty for arq in arquivos])):#Enquanto nenhum dos arquivos disponíveis para intercalação forem esvaziados, intercala as sequências
                 for arq in arquivos:
-                    self.ram.appendSeq(arq.dequeue())
+                    self.ram.appendList(arq.dequeue())
                 self.ram.intercala()
                 targetFile.appendList(self.ram.memoria)
                 self.ram.memoria = []
@@ -153,6 +162,10 @@ class Cascata:
 
     @property
     def avgSeqSize(self) -> float: #Retorna o valor da função beta, que é a quantidade de registros dividido pela quantidade de sequências vezes o tamanho da memória principal
+        if self.qtdSequencias == 0:
+            raise ZeroDivisionError("Quantidade de sequências é zero, impossível calcular beta")
+        if self.ramSize == 0:
+            raise ZeroDivisionError("Tamanho da memória principal é zero, impossível calcular beta")
         return self.qtdRegistros/(self.qtdSequencias*self.ramSize)
 
     @property
@@ -168,7 +181,7 @@ class Cascata:
         return self._ram.size
     
     @property
-    def ram(self)->list:
+    def ram(self)->RAMCascata:
         return self._ram
     
     @property
@@ -185,9 +198,7 @@ class Cascata:
     def qtdSequencias(self)->int:
         n = 0
         for file in self.arquivos:
-            for seq in file.getLists():
-                if len(seq) > 0:
-                    n += 1
+            n += file.qtdSequencias
         return n
     
     @property
@@ -205,3 +216,7 @@ class Cascata:
     @ramSize.setter
     def ramSize(self, ramSize: int)->None:
         self._ramSize = ramSize
+
+    @output.setter
+    def output(self, output: str)->None:
+        self._output = output

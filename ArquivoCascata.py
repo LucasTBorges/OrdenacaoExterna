@@ -1,7 +1,7 @@
 from Arquivo import Arquivo
 from copy import deepcopy
 class SequenciaCascata():
-    def __init__(self, sequencia: list, ordenado: False) -> None:
+    def __init__(self, sequencia: list, ordenado= False) -> None:
         if not ordenado: #Essa classe representa uma sequência ordenada, o parâmetro ordenado é uma garantia de que a sequência é ordenada. Sem essa garantia, verifica-se se a sequência está ordenada
             for i in range(1, len(sequencia)):
                 if sequencia[i] < sequencia[i-1]:
@@ -32,11 +32,12 @@ class SequenciaCascata():
     def dequeue(self)->int: #Retorna o primeiro elemento da sequência
         if len(self._sequencia) == 0:
             raise IndexError("Houve a tentativa de remover o primeiro elemento de uma sequência vazia")
-        return self._sequencia.pop(0)
+        retorno = self._sequencia.pop(0)
+        return retorno
     
 class ArquivoCascata():
     def __init__(self, lists: list = []) -> None:
-        self._sequencias = map(SequenciaCascata, lists)
+        self._sequencias = list(map(SequenciaCascata, lists))
         self._writeOps = 0
         self._congelado = False
     
@@ -66,7 +67,8 @@ class ArquivoCascata():
         if len(self._sequencias) == 0:
             raise IndexError("Houve a tentativa de remover a primeira sequência de um arquivo vazio")
         value = self._sequencias.pop(0)
-
+        return value
+    
     def congela(self)->None:
         if self._congelado:
             raise ValueError("Tentativa de congelar arquivo já congelado")
@@ -100,10 +102,16 @@ class ArquivoCascata():
     
     @property
     def qtdSequencias(self)->int: #Retorna a quantidade de sequências não vazias
+        n=0
         for seq in self._sequencias:
             if len(seq) > 0:
                 n += 1
+        return n
 
     @property
     def writeOps(self)->int:
         return self._writeOps
+    
+    @property
+    def congelado(self)->bool:
+        return self._congelado
