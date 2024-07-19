@@ -1,5 +1,4 @@
 from CascataPackage.ArquivoCascata import ArquivoCascata
-from CascataPackage.SequenciaCascata import SequenciaCascata
 from CascataPackage.HeapCascata import HeapCascata
 class Intercalador():
     def __init__(self, files: list[ArquivoCascata], targetFile:ArquivoCascata, heap: HeapCascata)->None:
@@ -47,7 +46,7 @@ class Intercalador():
 
     @property
     def done(self)->bool:
-        return all([length == 0 for length in self.seqsSizes])
+        return all([length == 0 for length in self.seqsSizes]) and self._heap.isEmpty
 
 
     @property

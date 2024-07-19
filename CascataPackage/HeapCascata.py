@@ -15,6 +15,8 @@ class HeapCascata: #TODO: implementar como heap mínima
             if self._memory[i]["value"] > elemento:
                 self._memory.insert(i, record)
                 return
+        self._memory.append(record)
+        return
 
     def dequeue(self)->int:
         return self._memory.pop(0)
@@ -32,6 +34,10 @@ class HeapCascata: #TODO: implementar como heap mínima
     @property
     def freeSpace(self)->int:
         return self._size - len(self._memory)
+    
+    @property
+    def isEmpty(self)->bool:
+        return len(self._memory) == 0
     
     @property
     def size(self)->int:

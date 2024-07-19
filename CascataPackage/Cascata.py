@@ -1,10 +1,11 @@
 from CascataPackage.ArquivoCascata import ArquivoCascata
-""" from RAMCascata import RAMCascata """
 from CascataPackage.HeapCascata import HeapCascata
 from CascataPackage.Intercalador import Intercalador
 
 class Cascata:
     def __init__(self, arquivos: list, ramSize: int, memoriaInfinita:bool = False)->None:
+        if ramSize < len(arquivos)-1:
+            raise ValueError("Memória principal deve ser maior ou igual ao número de arquivos menos 1")
         self._arquivos = arquivos #Lista de arquivos
         self._fase = 0 #Fase atua
         self._ram = HeapCascata(ramSize, memoriaInfinita) #Memória principal
@@ -29,9 +30,12 @@ class Cascata:
 
     def calcEsforco(self)->float: #Calcula a função alfa, que é a quantidade de operações de escrita dividida pela quantidade de registros
         writeOps = 0
+        nRegistros:int = self.qtdRegistros
+        if nRegistros == 0:
+            raise ZeroDivisionError("Quantidade de registros é zero, impossível calcular alfa")
         for arq in self.arquivos:
             writeOps += arq.writeOps
-        return writeOps/self.qtdRegistros
+        return writeOps/nRegistros
     
     def faseCompleta(self)->bool: #Retorna True se todos os arquivos estiverem congelados ou vazios, significando que a fase atual foi completada
         for arq in self.arquivos:

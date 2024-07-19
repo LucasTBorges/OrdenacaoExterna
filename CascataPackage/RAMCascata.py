@@ -1,4 +1,4 @@
-from .SequenciaCascata import SequenciaCascata
+from CascataPackage.SequenciaCascata import SequenciaCascata
 
 class RAMCascata:
     def __init__(self, ramSize: int, memoriaInfinita:bool = False)->None:
