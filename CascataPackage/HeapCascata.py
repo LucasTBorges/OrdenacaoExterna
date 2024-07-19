@@ -1,11 +1,10 @@
 class HeapCascata: #TODO: implementar como heap mínima
-    def __init__(self, size:int, memoriaInfinita:bool = False)->None:
+    def __init__(self, size:int)->None:
         self._size = size
-        self._infinite = memoriaInfinita
         self._memory = []
 
     def queue(self, elemento:int, fileNum:int)->None:
-        if not self._infinite and self.isFull:
+        if self.isFull:
             raise IndexError(f"Houve a tentativa de adicionar o elemento ({elemento}) a uma memória cheia")
         record = {"value":elemento, "file":fileNum}
         if len(self._memory) == 0:
@@ -22,7 +21,7 @@ class HeapCascata: #TODO: implementar como heap mínima
         return self._memory.pop(0)
     
     def __str__(self) -> str:
-        return "{" + " ".join([str(x) for x in self._memory]) + "}"
+        return "(Valor, Origem): {" + " ".join([f'({x["value"]}, {x["file"]})' for x in self._memory]) + "}"
     
     def __repr__(self) -> str:
         return self.__str__()
