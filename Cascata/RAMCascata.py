@@ -37,6 +37,14 @@ class RAMCascata:
     @size.setter
     def size(self, size: int)->None:
         self._size = size
+
+    def queue(self, elemento: int)->None: #TODO
+        if not self.memoriaInfinita and len(self.memoria) == self.size:
+            raise IndexError(f"Houve a tentativa de adicionar um elemento ({elemento}) a uma memória cheia")
+        pass
+
+    def dequeue(self)->int: #TODO
+        return 0
     
     def appendElement(self, elemento: int)->None:
         if not self.memoriaInfinita and len(self.memoria) == self.size:
