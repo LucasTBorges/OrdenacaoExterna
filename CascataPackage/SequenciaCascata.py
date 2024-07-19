@@ -18,6 +18,9 @@ class SequenciaCascata():
     def __str__(self)->str:
         return "{" + " ".join([str(x) for x in self._sequencia]) + "}"
     
+    def __repr__(self) -> str:
+        return self.__str__()
+    
     def __iter__(self):
         return iter(self._sequencia)
     

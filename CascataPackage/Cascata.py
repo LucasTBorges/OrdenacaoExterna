@@ -1,11 +1,13 @@
-from ArquivoCascata import SequenciaCascata, ArquivoCascata
-from RAMCascata import RAMCascata
+from CascataPackage.ArquivoCascata import ArquivoCascata
+""" from RAMCascata import RAMCascata """
+from CascataPackage.HeapCascata import HeapCascata
+from CascataPackage.Intercalador import Intercalador
 
 class Cascata:
     def __init__(self, arquivos: list, ramSize: int, memoriaInfinita:bool = False)->None:
         self._arquivos = arquivos #Lista de arquivos
         self._fase = 0 #Fase atua
-        self._ram = RAMCascata(ramSize, memoriaInfinita) #Memória principal
+        self._ram = HeapCascata(ramSize, memoriaInfinita) #Memória principal
         self._qtdRegistros = None #Quantidade de registros, calculado quando chamado pela primeira vez
         self._output = "" #String de saída
 
@@ -44,7 +46,7 @@ class Cascata:
 
     def cascatear(self)->None:#Executa uma fase da cascata
         while not self.faseCompleta():
-            targetFile = None
+            targetFile:ArquivoCascata|None = None
             for file in self.arquivos:
                 if file.isEmpty:
                     targetFile = file
@@ -54,11 +56,8 @@ class Cascata:
             if len(arquivos) == 0:
                 raise Exception("Tentativa de executar cascata falhou pois não haviam arquivos disponíveis para intercalar, apesar da verificação de faseCompleta ter indicado o contrário")
             while (all([not arq.isEmpty for arq in arquivos])):#Enquanto nenhum dos arquivos disponíveis para intercalação forem esvaziados, intercala as sequências
-                for arq in arquivos:
-                    self.ram.appendList(arq.dequeue())
-                self.ram.intercala()
-                targetFile.appendList(self.ram.memoria)
-                self.ram.memoria = []
+                merger: Intercalador = Intercalador(arquivos, targetFile, self.ram)
+                merger.intercala()
             targetFile.congela()
         self.fase += 1 #Incrementa a fase
         self.descongelarAll() #Descongela todos os arquivos
@@ -91,7 +90,7 @@ class Cascata:
         return self._fase
     
     @property
-    def arquivos(self)->list:
+    def arquivos(self)->list[ArquivoCascata]:
         return self._arquivos
     
     @property
@@ -99,7 +98,7 @@ class Cascata:
         return self._ram.size
     
     @property
-    def ram(self)->RAMCascata:
+    def ram(self)->HeapCascata:
         return self._ram
     
     @property
@@ -124,7 +123,7 @@ class Cascata:
         return self._output
 
     @arquivos.setter
-    def arquivos(self, arquivos: list)->None:
+    def arquivos(self, arquivos: list[ArquivoCascata])->None:
         self._arquivos = arquivos
 
     @fase.setter

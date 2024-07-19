@@ -1,6 +1,5 @@
-from Arquivo import Arquivo
 from copy import deepcopy
-from SequenciaCascata import SequenciaCascata
+from CascataPackage.SequenciaCascata import SequenciaCascata
 
 class ArquivoCascata():
     def __init__(self, lists: list = []) -> None:
@@ -11,7 +10,7 @@ class ArquivoCascata():
         
     
     @staticmethod
-    def converteArquivo(arquivo: Arquivo)->'ArquivoCascata':
+    def converteArquivo(arquivo)->'ArquivoCascata':
         arq = ArquivoCascata()
         arq._sequencias = list(SequenciaCascata, deepcopy(arquivo.getLists()))
         arq._writeOps = arquivo.writeOps
@@ -29,6 +28,7 @@ class ArquivoCascata():
             self._sequencias[-1].append(value)
         else:
             self._sequencias.append(SequenciaCascata([value]))
+            self._seqClosed = False
         self._writeOps += 1
         
     def newSeq(self)->None: #Cria uma nova sequência vazia no arquivo
@@ -57,6 +57,9 @@ class ArquivoCascata():
         for seq in self._sequencias:
             string += str(seq)
         return string
+    
+    def __repr__(self) -> str:
+        return self.__str__()
     
     def getFirstSeqSize(self)->int:
         if len(self._sequencias) == 0:

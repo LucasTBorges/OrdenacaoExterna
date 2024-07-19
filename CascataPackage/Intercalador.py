@@ -1,6 +1,6 @@
-from ArquivoCascata import ArquivoCascata
-from SequenciaCascata import SequenciaCascata
-from HeapCascata import HeapCascata
+from CascataPackage.ArquivoCascata import ArquivoCascata
+from CascataPackage.SequenciaCascata import SequenciaCascata
+from CascataPackage.HeapCascata import HeapCascata
 class Intercalador():
     def __init__(self, files: list[ArquivoCascata], targetFile:ArquivoCascata, heap: HeapCascata)->None:
         self._files = files
@@ -13,7 +13,7 @@ class Intercalador():
         currFile: int = 0 #Índice do arquivo que está sendo lido 
         #O bloco a seguir parece bizarro mas garanto que ele é eficiente, ele só parece bizarro, explico o porquê a seguir:
 
-        iter = 0 #DEBUG ################## TODO: Remover
+        iter:int = 0 #DEBUG ################## TODO: Remover
 
         while not self.done:
             #Vai executar exatamente n vezes, onde n é o número de registros a serem lidos
