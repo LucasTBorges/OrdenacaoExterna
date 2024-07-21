@@ -7,7 +7,7 @@ class Cascata:
         if ramSize < len(arquivos)-1:
             raise ValueError("Memória principal deve ser maior ou igual ao número de arquivos menos 1")
         self._arquivos = arquivos #Lista de arquivos
-        self._fase = 0 #Fase atua
+        self._fase = 0 #Fase atual
         self._ram = HeapCascata(ramSize) #Memória principal
         self._qtdRegistros = None #Quantidade de registros, calculado quando chamado pela primeira vez
         self._output = "" #String de saída

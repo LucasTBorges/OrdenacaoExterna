@@ -1,4 +1,4 @@
-class HeapCascata: #TODO: implementar como heap mínima
+class HeapCascata:
     def __init__(self, size:int)->None:
         self._size = size
         self._memory = []
