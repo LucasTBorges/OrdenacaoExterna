@@ -2,8 +2,8 @@ from copy import deepcopy
 from CascataPackage.SequenciaCascata import SequenciaCascata
 
 class ArquivoCascata():
-    def __init__(self, lists: list = []) -> None:
-        self._sequencias:list[SequenciaCascata] = list(map(SequenciaCascata, lists))
+    def __init__(self, lists: list[SequenciaCascata] = []) -> None:
+        self._sequencias:list[SequenciaCascata] = lists
         self._writeOps:int = 0 #Contador de operações de escrita no arquivo
         self._congelado:bool = False #Indica se o arquivo já foi arquivo alvo na fase atual da cascata, indicando que não deve mais ser alterado até o fim da fase
         self._seqClosed:bool = False #Indica se a última sequência do arquivo está fechada, indicando que a próxima inserção deve ser em uma nova sequência
@@ -42,12 +42,12 @@ class ArquivoCascata():
             self._sequencias.pop(0)
         return value
     
-    def congela(self)->None:
+    def congela(self)->None: #Congela o arquivo, impedindo que ele seja modificado até o fim da fase
         if self._congelado:
             raise ValueError("Tentativa de congelar arquivo já congelado")
         self._congelado = True
 
-    def descongela(self)->None:
+    def descongela(self)->None: #Descongela o arquivo, idealmente no início de uma nova fase, permitindo que ele seja modificado
         if not self._congelado:
             raise ValueError("Tentativa de descongelar arquivo não congelado")
         self._congelado = False
@@ -66,12 +66,12 @@ class ArquivoCascata():
             raise IndexError("Houve a tentativa de acessar o tamanho da primeira sequência de um arquivo vazio")
         return len(self._sequencias[0])
     
-    def closeSeq(self)->None:
+    def closeSeq(self)->None: #Fecha a última sequência do arquivo, o próximo elemento inserido será em uma nova sequência
         if self._seqClosed:
             raise ValueError("Tentativa de fechar sequência já fechada")
         self._seqClosed = True
 
-    def openSeq(self)->None:
+    def openSeq(self)->None: #Abre a última sequência do arquivo, o próximo elemento inserido será na sequência atual
         if not self._seqClosed:
             raise ValueError("Tentativa de abrir sequência já aberta")
         self._seqClosed = False

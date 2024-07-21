@@ -1,10 +1,12 @@
+from CascataPackage.Registro import Registro
+
 class SequenciaCascata():
-    def __init__(self, sequencia: list, ordenado= False) -> None:
+    def __init__(self, sequencia: list = [], ordenado= False) -> None:
         if not ordenado: #Essa classe representa uma sequência ordenada, o parâmetro ordenado é uma garantia de que a sequência é ordenada. Sem essa garantia, verifica-se se a sequência está ordenada
             for i in range(1, len(sequencia)):
                 if sequencia[i] < sequencia[i-1]:
                     raise ValueError(f"A sequência passada não está ordenada. Sequência: {sequencia}. Elementos {sequencia[i-1]} (índice {i-1}) e {sequencia[i]} (índice {i}) estão fora de ordem.")
-        self._sequencia = sequencia
+        self._sequencia = list(map(Registro, sequencia))
     
     def __len__(self)->int:
         return len(self._sequencia)
@@ -28,7 +30,7 @@ class SequenciaCascata():
         return next(self._sequencia)
     
     def append(self, elemento: int)->None:
-        self._sequencia.append(elemento)
+        self._sequencia.append(Registro(elemento))
 
     def dequeue(self)->int: #Retorna o primeiro elemento da sequência
         if len(self._sequencia) == 0:
@@ -36,3 +38,15 @@ class SequenciaCascata():
         retorno = self._sequencia.pop(0)
         return retorno
     
+    def sort(self)->None:
+        self._sequencia.sort()
+
+    def sorted(self)->'SequenciaCascata':
+        return SequenciaCascata(sorted(self._sequencia), True)
+    
+    @staticmethod
+    def newFakeSeq(size:int = 1)->'SequenciaCascata':
+        seq: 'SequenciaCascata' = SequenciaCascata()
+        for _ in range(size):
+            seq.append(Registro())
+        return seq
