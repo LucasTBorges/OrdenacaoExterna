@@ -1,9 +1,11 @@
+from CascataPackage.Registro import Registro
+
 class HeapCascata:
     def __init__(self, size:int)->None:
         self._size = size
         self._memory = []
 
-    def queue(self, elemento:int, fileNum:int)->None:
+    def queue(self, elemento:Registro, fileNum:int)->None:
         if self.isFull:
             raise IndexError(f"Houve a tentativa de adicionar o elemento ({elemento}) a uma memória cheia")
         record = {"value":elemento, "file":fileNum}

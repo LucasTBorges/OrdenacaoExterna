@@ -38,7 +38,13 @@ class Registro():
         if self._fake and other.fake:
             return True
         return self._value == other._value
-    
+
+    @staticmethod
+    def convertValue(value) -> 'Registro':
+        if isinstance(value, Registro):
+            return value
+        return Registro(value)
+        
     
     @property
     def value(self) -> int:
