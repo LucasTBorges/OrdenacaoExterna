@@ -7,7 +7,7 @@ class Seletor:
         if(len(input)<1):
             raise ValueError("Entrada vazia")
         self._heap: Heap = Heap(size)
-        self._input: list[int] = input
+        self._input: list[int] = list(input) #Cria uma cópia da entrada para não alterar a lista original
         self._output: list[list[int]] = [[]]
         self._remaining: int = len(input) #Número de registros restantes para serem processados
 
