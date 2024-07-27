@@ -1,7 +1,7 @@
 from SelecaoNatural.Heap import Heap
 from SelecaoNatural.Record import Record
 class Seletor:
-    def __init__(self, input: list[int], size:int)->None:
+    def __init__(self, input: list[int], size:int)->None: #Recebe uma lista de registros e o tamanho da memória principal
         if(size<1):
             raise ValueError("Tamanho da memória principal inválido")
         if(len(input)<1):

@@ -13,10 +13,8 @@ class Record:
         return str(self)
     
     def __lt__(self, other: "Record") -> bool:#Registros marcados são considerados maiores que não marcados. Registros de igual marcação são comparados com base no valor.
-        if not self._marked:
-            return self._value < other.value
-        if not other.marked:
-            return False
+        if self._marked != other.marked: #Se um registro é marcado e o outro não, o marcado é considerado maior
+            return not self._marked
         return self._value < other.value
         
     @property

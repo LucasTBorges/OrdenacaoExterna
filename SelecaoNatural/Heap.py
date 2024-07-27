@@ -1,5 +1,4 @@
 from SelecaoNatural.Record import Record
-
 class Heap:
     def __init__(self, size:int)->None:
         self._size = size
@@ -42,6 +41,9 @@ class Heap:
             if not record.marked:
                 raise ValueError("Tentativa de desmarcar um registro que já está desmarcado")
             record.marked = False
+
+    def __str__(self):
+        return str(self._memory)
 
     @staticmethod
     def parent(index:int)->int:
