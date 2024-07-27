@@ -26,3 +26,7 @@ class Record:
     @property
     def marked(self):
         return self._marked
+    
+    @marked.setter
+    def marked(self, value:bool):
+        self._marked = value

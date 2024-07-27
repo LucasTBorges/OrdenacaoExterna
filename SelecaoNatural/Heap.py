@@ -5,11 +5,11 @@ class Heap:
         self._size = size
         self._memory = []
 
-    def insert(self, record: Record)->None:
+    def insert(self, record: Record|int)->None:
         self._memory.append(record)
         self.heapifyUp(len(self._memory)-1)
 
-    def remove(self)->Record:
+    def remove(self)->Record|int:
         if len(self._memory) == 0:
             raise IndexError("Tentativa de remover um registro de uma heap vazia")
         self._memory[0], self._memory[-1] = self._memory[-1], self._memory[0]
@@ -35,6 +35,14 @@ class Heap:
             self._memory[index], self._memory[parent] = self._memory[parent], self._memory[index]
             self.heapifyUp(parent)
 
+    def unmarkAll(self): #Desmarca todos os registros da heap
+        for record in self._memory:
+            if not isinstance(record, Record):
+                raise TypeError("Tentativa de desmarcar um registro que não é do tipo record")
+            if not record.marked:
+                raise ValueError("Tentativa de desmarcar um registro que já está desmarcado")
+            record.marked = False
+
     @staticmethod
     def parent(index:int)->int:
         return (index-1)//2
@@ -44,3 +52,13 @@ class Heap:
     @staticmethod
     def rightChild(index:int)->int:
         return 2*index + 2
+    
+    @property
+    def size(self):
+        return self._size
+    @property
+    def full(self):
+        return len(self._memory) == self._size
+    @property
+    def empty(self):
+        return len(self._memory) == 0
