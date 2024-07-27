@@ -1,4 +1,4 @@
-class Record():
+class Record:
     def __init__(self, value:int, marked:bool = False):
         self._value = value
         self._marked = marked #indicador de se o registro foi marcado por ser menor que o último elemento adicionado à sequência ordenada durante a seleção natural
