@@ -3,7 +3,7 @@ from CascataPackage.HeapCascata import HeapCascata
 from CascataPackage.Intercalador import Intercalador
 
 class Cascata:
-    def __init__(self, arquivos: list, ramSize: int)->None:
+    def __init__(self, arquivos: list[ArquivoCascata], ramSize: int)->None:
         if ramSize < len(arquivos)-1:
             raise ValueError("Memória principal deve ser maior ou igual ao número de arquivos menos 1")
         self._arquivos = arquivos #Lista de arquivos
