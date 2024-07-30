@@ -12,7 +12,7 @@ class DistribuidorCascata:
     def calcDistribution(self)->list[int]: #Calcula a distribuição ideal de sequências entre os arquivos
         if(self.qtdSeq < 2): #Se houver apenas uma sequência ordenada, já temos todos os registros ordenados
             return self._files
-        self.firstCascade()
+        self.firstMerge()
         while sum(self._files) < self.qtdSeq:
             self.reverseCascade()
             self._steps.append(list(self._files))
@@ -39,8 +39,8 @@ class DistribuidorCascata:
                     self._files[i] += sequences
             self._frozenFiles[minFileIndex] = False #Descongela o arquivo selecionado
 
-    def firstCascade(self)->None: #Realiza o primeiro passo da simulação da cascata, especial pois todos menos um arquivo está vazio
-        #Distribui as sequências do arquivo não vazio para os outros arquivos
+    def firstMerge(self)->None: #Realiza o primeiro passo da simulação da cascata, especial pois todos menos um arquivo está vazio
+        #Distribui a sequência do arquivo não vazio para os outros arquivos
         for i in range(self.qtdFiles):
             value: int = self._files[i]
             if value == 0:
