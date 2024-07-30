@@ -1,9 +1,7 @@
-from ArquivoPolifasica import ArquivoPolifasica
+from PolifasicaPackage.ArquivoPolifasica import ArquivoPolifasica
 
 class Polifasica:
-    def __init__(self, k: int, arquivos: list): 
-        # k = numero max de arquivos abertos concomitantemente
-        self.k = k
+    def __init__(self, arquivos: list[ArquivoPolifasica]):
         self.arquivos = arquivos
 
     def __str__(self)->str:
