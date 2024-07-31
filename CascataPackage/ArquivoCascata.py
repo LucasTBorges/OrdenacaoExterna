@@ -95,7 +95,9 @@ class ArquivoCascata():
     def qtdRegistros(self)->int:
         n = 0
         for seq in self._sequencias:
-            n += len(seq)
+            for i in seq:
+                if(not i.fake):
+                    n += 1
         return n
     
     @property
