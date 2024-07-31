@@ -17,12 +17,13 @@ class ArquivoCascata():
         arq._writeOps = arquivo.writeOps
         return arq
     
-    def appendList(self, lista: SequenciaCascata)->None: #Adiciona uma sequência à lista de sequências do arquivo, ou converte a lista em uma sequência (se for uma lista) e a adiciona
+    def appendList(self, lista: SequenciaCascata, isInicial:bool=False)->None: #Adiciona uma sequência à lista de sequências do arquivo, ou converte a lista em uma sequência (se for uma lista) e a adiciona
         self._sequencias.append(SequenciaCascata(lista))
-        if not lista.isFake:#TODO: Verificar se isso é necessário, talvez sequências fakes ainda contem para o número de operações de escrita normalmente
-            self._writeOps += len(lista)
-        else:
-            self._writeOps += 1
+        if not isInicial:
+            if not lista.isFake:
+                self._writeOps += len(lista)
+            else:
+                self._writeOps += 1
 
     def appendElement(self,value:int|None|Registro)->None: #Adiciona um valor à última sequência do arquivo, ou cria uma nova sequência com o valor caso o arquivo esteja vazio
         if len(self._sequencias)>0 and not self._seqClosed:
