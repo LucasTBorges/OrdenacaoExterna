@@ -1,4 +1,5 @@
 from CascataPackage.SequenciaCascata import SequenciaCascata
+from CascataPackage.ArquivoCascata import ArquivoCascata
 
 class DistribuidorCascata:
     def __init__(self, input:list[list[int]], qtdFiles:int)->None: #Recebe lista de listas ordenadas de inteiros, mas armazena como objeto Sequência Ordenada
@@ -12,12 +13,12 @@ class DistribuidorCascata:
     def calcDistribution(self)->list[int]: #Calcula a distribuição ideal de sequências entre os arquivos
         if(self.qtdSeq < 2): #Se houver apenas uma sequência ordenada, já temos todos os registros ordenados
             return self._files
-        self.firstMerge()
+        self.firstStep()
+        self._steps.append(list(self._files))
         while sum(self._files) < self.qtdSeq:
             self.reverseCascade()
             self._steps.append(list(self._files))
         return self._files
-    
 
     def stringSteps(self)->str: #Retorna uma string com os passos da simulação da cascata
         qtdSteps:int = len(self._steps)
@@ -39,7 +40,7 @@ class DistribuidorCascata:
                     self._files[i] += sequences
             self._frozenFiles[minFileIndex] = False #Descongela o arquivo selecionado
 
-    def firstMerge(self)->None: #Realiza o primeiro passo da simulação da cascata, especial pois todos menos um arquivo está vazio
+    def firstStep(self)->None: #Realiza o primeiro passo da simulação da cascata, especial pois todos menos um arquivo está vazio
         #Distribui a sequência do arquivo não vazio para os outros arquivos
         for i in range(self.qtdFiles):
             value: int = self._files[i]
@@ -48,7 +49,26 @@ class DistribuidorCascata:
             else:
                 self._files[i] = 0
 
-
+    def distributeSequences(self, ordered:bool=False)->list[ArquivoCascata]: #Distribui as sequências entre os arquivos. "Ordered" é a garantia de que as sequências estão ordenadas, se for falso, faz a verificação
+        convertedSequences:list[SequenciaCascata] = [SequenciaCascata(seq) for seq in self._input]
+        files: list[ArquivoCascata] = []
+        for _ in range(self.qtdFiles):
+            files.append(ArquivoCascata())
+        distribution: list[int] = self.calcDistribution()
+        totalSeq:int = sum(distribution) #quantidade total de sequências
+        #qtdFakeSeq:int = totalSeq - len(convertedSequences) #quantidade de sequências falsas a serem adicionadas
+        currSeq:SequenciaCascata
+        for i in range(totalSeq):
+            if len(convertedSequences)>0:
+                currSeq = convertedSequences.pop(0)
+            else:
+                currSeq = SequenciaCascata.newFakeSeq()
+            index:int =i%self.qtdFiles
+            while distribution[index] == 0:
+                index = (index+1)%self.qtdFiles
+            files[index].appendList(currSeq)
+            distribution[index] -= 1
+        return files
 
     def unfrozenFiles(self)->list[int]: #Retorna uma lista com os índices dos arquivos que não estão congelados
         return [i for i in range(self.qtdFiles) if not self._frozenFiles[i]]

@@ -6,7 +6,7 @@ class SequenciaCascata():
             for i in range(1, len(sequencia)):
                 if sequencia[i] < sequencia[i-1]:
                     raise ValueError(f"A sequência passada não está ordenada. Sequência: {sequencia}. Elementos {sequencia[i-1]} (índice {i-1}) e {sequencia[i]} (índice {i}) estão fora de ordem.")
-        self._sequencia = list(map(Registro.convertValue, sequencia))
+        self._sequencia:list[Registro] = list(map(Registro.convertValue, sequencia))
     
     def __len__(self)->int:
         return len(self._sequencia)
@@ -50,6 +50,20 @@ class SequenciaCascata():
 
     def sorted(self)->'SequenciaCascata':
         return SequenciaCascata(sorted(self._sequencia), True)
+    
+    @property
+    def isFake(self)->bool:
+        if len(self._sequencia) == 0:
+            return False
+        for item in self._sequencia:
+            if item.fake:
+                return True
+
+    @property
+    def lastItem(self)->int:
+        if len(self._sequencia) == 0:
+            raise IndexError("Houve a tentativa de acessar o último elemento de uma sequência vazia")
+        return self._sequencia[-1]
     
     @staticmethod
     def newFakeSeq(size:int = 1)->'SequenciaCascata':

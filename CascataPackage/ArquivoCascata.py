@@ -1,9 +1,10 @@
 from copy import deepcopy
 from CascataPackage.SequenciaCascata import SequenciaCascata
+from CascataPackage.Registro import Registro
 
 class ArquivoCascata():
     def __init__(self, lists: list[SequenciaCascata] = []) -> None:
-        self._sequencias:list[SequenciaCascata] = lists
+        self._sequencias:list[SequenciaCascata] = list(lists) #Por algum motivo, o valor padrão "[]" é compartilhado entre instâncias da classe, então é necessário criar uma cópia da lista passada como argumento
         self._writeOps:int = 0 #Contador de operações de escrita no arquivo
         self._congelado:bool = False #Indica se o arquivo já foi arquivo alvo na fase atual da cascata, indicando que não deve mais ser alterado até o fim da fase
         self._seqClosed:bool = False #Indica se a última sequência do arquivo está fechada, indicando que a próxima inserção deve ser em uma nova sequência
@@ -16,15 +17,17 @@ class ArquivoCascata():
         arq._writeOps = arquivo.writeOps
         return arq
     
-    def appendList(self, lista: list|SequenciaCascata)->None: #Adiciona uma sequência à lista de sequências do arquivo, ou converte a lista em uma sequência (se for uma lista) e a adiciona
-        if isinstance(lista, SequenciaCascata):
-            self._sequencias.append(lista)
+    def appendList(self, lista: SequenciaCascata)->None: #Adiciona uma sequência à lista de sequências do arquivo, ou converte a lista em uma sequência (se for uma lista) e a adiciona
+        self._sequencias.append(SequenciaCascata(lista))
+        if not lista.isFake:#TODO: Verificar se isso é necessário, talvez sequências fakes ainda contem para o número de operações de escrita normalmente
+            self._writeOps += len(lista)
         else:
-            self._sequencias.append(SequenciaCascata(lista))
-        self._writeOps += len(lista)
+            self._writeOps += 1
 
-    def appendElement(self,value:int)->None: #Adiciona um valor à última sequência do arquivo, ou cria uma nova sequência com o valor caso o arquivo esteja vazio
+    def appendElement(self,value:int|None|Registro)->None: #Adiciona um valor à última sequência do arquivo, ou cria uma nova sequência com o valor caso o arquivo esteja vazio
         if len(self._sequencias)>0 and not self._seqClosed:
+            if value is None or (isinstance(value, Registro) and value.fake): #Se for um registro falso, ignora
+                return
             self._sequencias[-1].append(value)
         else:
             self._sequencias.append(SequenciaCascata([value]))
