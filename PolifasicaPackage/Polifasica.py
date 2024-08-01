@@ -1,16 +1,20 @@
 from PolifasicaPackage.ArquivoPolifasica import ArquivoPolifasica
 
 class Polifasica:
-    def __init__(self, arquivos: list[ArquivoPolifasica]):
-        self.arquivos = arquivos
+    def __init__(self, memSize: int, arquivos: list[ArquivoPolifasica]):
+        self._arquivos = arquivos
 
     def __str__(self)->str:
-        return str([arq.sequencias for arq in self.arquivos])
+        return str([arq.sequencias for arq in self._arquivos])
 
     @property
     def completo(self):
-        arquivos = [arq for arq in self.arquivos if not arq.isEmpty]
+        arquivos = [arq for arq in self._arquivos if not arq.isEmpty]
         return len(arquivos) == 1 and len(arquivos[0].sequencias) == 1
+
+    @property
+    def arquivos(self)->list[ArquivoPolifasica]:
+        return self._arquivos
 
     def ordenarSequencias(self, sequencias: list):
         new_ordered_list = []
