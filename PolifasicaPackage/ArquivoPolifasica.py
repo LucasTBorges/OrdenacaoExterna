@@ -3,6 +3,13 @@ class ArquivoPolifasica:
         self._sequencias = lists
         self._writeOps = 0
 
+    def __str__(self)->str:
+        string = "{"
+        for seq in self._sequencias:
+            string += str(seq)
+        string += "}"
+        return string
+
     @property
     def isEmpty(self)->bool:
         return len(self._sequencias) == 0 or (len(self._sequencias) == 1 and len(self._sequencias[0]) == 0)

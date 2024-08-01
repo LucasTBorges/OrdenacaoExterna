@@ -31,6 +31,10 @@ class Polifasica:
         return self._arquivos
 
     @property
+    def output(self) -> str:
+        return self._output
+
+    @property
     def qtdSequencias(self) -> int:
         n = 0
         for arq in self.arquivos:
@@ -69,6 +73,10 @@ class Polifasica:
 
         
     def polifasear(self):
+        self._output += f"fase: {self._fase} {self.avgSeqSize:.2f}\n"
+        for i in range(0, len(self._arquivos)):
+            self._output += f"{i+1}: {self._arquivos[i]}\n"
+        self._fase += 1
         while not self.completo:
             target_file = None
             for file in self._arquivos:
@@ -86,13 +94,8 @@ class Polifasica:
                     if arq != target_file and len(arq.sequencias) > 0:
                         arq.sequencias.pop(0)
 
-                # arqs = [arq.sequencias for arq in arquivos]
-                # print('arquivos: ' + str(arqs))
-                # arqs = [arq.sequencias for arq in self._arquivos]
-                # print('self._arquivos: ' + str(arqs))
-
-
-
-
-
+            self._output += f"fase: {self._fase} {self.avgSeqSize:.2f}\n"
+            for i in range(0, len(self._arquivos)):
+                self._output += f"{i+1}: {self._arquivos[i]}\n"
+            self._fase += 1
     
