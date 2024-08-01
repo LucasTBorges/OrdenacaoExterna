@@ -1,9 +1,21 @@
 from PolifasicaPackage.ArquivoPolifasica import ArquivoPolifasica
+from DadosExecucao import DadosExecucao
 
 class Polifasica:
-    def __init__(self, memSize: int, arquivos: list[ArquivoPolifasica]):
+    def __init__(self, qtdRegistros:int, ramSize:int, arquivos: list[ArquivoPolifasica], nSeqsInic:int = -1):
+        self._qtdRegistros = qtdRegistros
+
+        if nSeqsInic == -1:
+            qtdSeq = 0
+            for arq in arquivos:
+                qtdSeq += arq.qtdSequencias
+
+            self._dadosExec = DadosExecucao(qtdRegistros, ramSize, qtdSeq)
+        else:
+            self._dadosExec = DadosExecucao(qtdRegistros, ramSize, nSeqsInic)
+
         self._arquivos = arquivos
-        self._memSize = memSize
+        self._fase = 0
         self._output = ""
 
     def __str__(self)->str:
@@ -17,6 +29,25 @@ class Polifasica:
     @property
     def arquivos(self)->list[ArquivoPolifasica]:
         return self._arquivos
+
+    @property
+    def qtdSequencias(self) -> int:
+        n = 0
+        for arq in self.arquivos:
+            n += arq.qtdSequencias
+        return n
+
+    @property
+    def qtdRegistros(self) -> int:
+        return self._qtdRegistros
+
+    @property
+    def avgSeqSize(self) -> float:
+        if self.qtdSequencias == 0:
+            raise ZeroDivisionError("Quantidade de sequências é zero, impossível calcular beta")
+        if self.ramSize == 0:
+            raise ZeroDivisionError("Tamanho da memória principal é zero, impossível calcular beta")
+        return self.qtdRegistros/(self.qtdSequencias*self.ramSize)
 
     def ordenarSequencias(self, sequencias: list):
         new_ordered_list = []
