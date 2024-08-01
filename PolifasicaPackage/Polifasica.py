@@ -45,9 +45,9 @@ class Polifasica:
     def avgSeqSize(self) -> float:
         if self.qtdSequencias == 0:
             raise ZeroDivisionError("Quantidade de sequências é zero, impossível calcular beta")
-        if self.ramSize == 0:
+        if self._dadosExec.ramSize == 0:
             raise ZeroDivisionError("Tamanho da memória principal é zero, impossível calcular beta")
-        return self.qtdRegistros/(self.qtdSequencias*self.ramSize)
+        return self.qtdRegistros/(self.qtdSequencias*self._dadosExec.ramSize)
 
     def ordenarSequencias(self, sequencias: list):
         new_ordered_list = []
