@@ -3,6 +3,8 @@ from PolifasicaPackage.ArquivoPolifasica import ArquivoPolifasica
 class Polifasica:
     def __init__(self, memSize: int, arquivos: list[ArquivoPolifasica]):
         self._arquivos = arquivos
+        self._memSize = memSize
+        self._output = ""
 
     def __str__(self)->str:
         return str([arq.sequencias for arq in self._arquivos])
