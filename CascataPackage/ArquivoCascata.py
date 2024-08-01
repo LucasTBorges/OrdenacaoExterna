@@ -108,6 +108,14 @@ class ArquivoCascata():
             if len(seq) > 0:
                 n += 1
         return n
+    
+    @property
+    def qtdSequenciasReais(self)->int: #Retorna a quantidade de sequências não vazias e não falsas
+        n=0
+        for seq in self._sequencias:
+            if len(seq) > 0 and not seq.isFake:
+                n += 1
+        return n
 
     @property
     def writeOps(self)->int:

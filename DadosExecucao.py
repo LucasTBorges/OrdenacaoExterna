@@ -4,7 +4,7 @@ class DadosExecucao:
     def __init__(self, inputSize:int, ramSize:int, nSeqsInic:int)->None:
         self._inputSize:int = inputSize
         self._ramSize:int = ramSize
-        self._betas:list[float] = []
+        self._betas:list[float] = [] #Valores do fator alfa, adicionar à lista ao fim de cada fase da ordenação
         self._nSeqsInic:int = nSeqsInic #Número de sequências iniciais
         self._alpha:int #Fator alfa, definido ao fim da ordenação
 

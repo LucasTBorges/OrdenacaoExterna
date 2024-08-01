@@ -12,13 +12,15 @@ class Cascata:
         self._ram:HeapCascata = HeapCascata(ramSize) #Memória principal
         self._qtdRegistros:int|None = None #Quantidade de registros, calculado quando chamado pela primeira vez
         self._output:str = "" #String de saída
-        self._dadosExecucao:DadosExecucao = DadosExecucao(self.qtdRegistros, ramSize, self.qtdSequencias) #Dados de execução (ATENÇÃO: Conta sequências falsas no número de sequências iniciais)
+        self._dadosExecucao:DadosExecucao = DadosExecucao(self.qtdRegistros, ramSize, self.qtdSequenciasReais) #Dado de execução (ATENÇÃO: Não conta sequências falsas no número de sequências iniciais, apenas as sequências do input)
 
     def run(self)->str: #Executa a ordenação
         self.addToOutput()
         while not self.completo:
             self.cascatear()
-        self.output += f"\nfinal {self.calcEsforco():.2f}"
+        alfa:float = self.calcEsforco()
+        self.output += f"\nfinal {alfa:.2f}"
+        self._dadosExecucao.alpha = alfa #Adiciona o valor de alfa aos dados de execução
         return self.output
 
     def strFase(self)->str:
@@ -67,12 +69,13 @@ class Cascata:
             targetFile.congela()
         self.fase += 1 #Incrementa a fase
         self.descongelarAll() #Descongela todos os arquivos
-        self.addToOutput() #Adiciona a string da fase atual à string de saída
+        self.addToOutput() #Adiciona a string da fase atual à string de saída e adiciona o valor atual de beta aos dados de execução
 
-    def addToOutput(self)->None: #Adiciona a string da fase atual à string de saída
+    def addToOutput(self)->None: #Adiciona a string da fase atual à string de saída e adiciona o valor atual de beta aos dados de execução
         if self.output != "":
             self.output += "\n"
         self.output += self.strFase()
+        self._dadosExecucao.betas.append(self.avgSeqSize) #Adiciona o valor atual de beta aos dados de execução
 
     @property
     def completo(self) -> bool: #Retorna true se existir uma única sequência ordenada restante
@@ -125,8 +128,19 @@ class Cascata:
         return n
     
     @property
+    def qtdSequenciasReais(self)->int:
+        n = 0
+        for file in self.arquivos:
+            n += file.qtdSequenciasReais
+        return n
+    
+    @property
     def output(self)->str:
         return self._output
+
+    @property
+    def dadosExecucao(self)->DadosExecucao:
+        return self._dadosExecucao
 
     @arquivos.setter
     def arquivos(self, arquivos: list[ArquivoCascata])->None:
