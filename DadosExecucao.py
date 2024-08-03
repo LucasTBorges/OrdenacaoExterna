@@ -7,7 +7,7 @@ class DadosExecucao:
         self._betas:list[float] = []
         self._seqsInic = seqsInic #Sequências iniciais
         self._nSeqsInic:int = len(seqsInic) #Número de sequências iniciais
-        self._alpha:int #Fator alfa, definido ao fim da ordenação
+        self._alpha:float #Fator alfa, definido ao fim da ordenação
 
     @property
     def inputSize(self)->int:
@@ -26,11 +26,11 @@ class DadosExecucao:
         return self._nSeqsInic
     
     @property
-    def alpha(self)->int:
+    def alpha(self)->float:
         return self._alpha
 
     @alpha.setter
-    def alpha(self, alpha:int)->None:
+    def alpha(self, alpha:float)->None:
         self._alpha = alpha
 
     def to_dict(self):
