@@ -1,22 +1,32 @@
 from CascataPackage.ArquivoCascata import ArquivoCascata
 from CascataPackage.HeapCascata import HeapCascata
 from CascataPackage.Intercalador import Intercalador
+from DadosExecucao import DadosExecucao
+from CascataPackage.DistribuidorCascata import DistribuidorCascata
 
 class Cascata:
-    def __init__(self, arquivos: list[ArquivoCascata], ramSize: int)->None:
-        if ramSize < len(arquivos)-1:
+    def __init__(self, input:list[list[int]], ramSize: int, qtdFiles: int, ordered=False)->None: #Parâmetro ordered indica se há certeza de que as sequências iniciais estão ordenadas e portanto não deve haver uma checagem de ordenação
+        if ramSize < qtdFiles-1:
             raise ValueError("Memória principal deve ser maior ou igual ao número de arquivos menos 1")
-        self._arquivos = arquivos #Lista de arquivos
-        self._fase = 0 #Fase atual
-        self._ram = HeapCascata(ramSize) #Memória principal
-        self._qtdRegistros = None #Quantidade de registros, calculado quando chamado pela primeira vez
-        self._output = "" #String de saída
+        distribuidor = DistribuidorCascata(input, qtdFiles)
+        self._arquivos:list[ArquivoCascata] = distribuidor.distributeSequences(ordered) #Lista de arquivos
+        self._fase:int = 0 #Fase atual
+        self._ram:HeapCascata = HeapCascata(ramSize) #Memória principal
+        self._qtdRegistros:int|None = None #Quantidade de registros, calculado quando chamado pela primeira vez
+        self._output:str = "" #String de saída
+        self._dadosExecucao:DadosExecucao = DadosExecucao(ramSize, qtdFiles, input)
+
+    @staticmethod
+    def loadFromDados(dados:DadosExecucao)->'Cascata': #Carrega uma instância de Cascata a partir de um objeto DadosExecucao
+        return Cascata(dados.seqsInic, dados.ramSize, dados.qtdArquivos)
 
     def run(self)->str: #Executa a ordenação
         self.addToOutput()
         while not self.completo:
             self.cascatear()
-        self.output += f"\nfinal {self.calcEsforco():.2f}"
+        alfa:float = self.calcEsforco()
+        self.output += f"\nfinal {alfa:.2f}"
+        self._dadosExecucao.alpha = alfa #Adiciona o valor de alfa aos dados de execução
         return self.output
 
     def strFase(self)->str:
@@ -65,12 +75,13 @@ class Cascata:
             targetFile.congela()
         self.fase += 1 #Incrementa a fase
         self.descongelarAll() #Descongela todos os arquivos
-        self.addToOutput() #Adiciona a string da fase atual à string de saída
+        self.addToOutput() #Adiciona a string da fase atual à string de saída e adiciona o valor atual de beta aos dados de execução
 
-    def addToOutput(self)->None: #Adiciona a string da fase atual à string de saída
+    def addToOutput(self)->None: #Adiciona a string da fase atual à string de saída e adiciona o valor atual de beta aos dados de execução
         if self.output != "":
             self.output += "\n"
         self.output += self.strFase()
+        self._dadosExecucao.betas.append(self.avgSeqSize) #Adiciona o valor atual de beta aos dados de execução
 
     @property
     def completo(self) -> bool: #Retorna true se existir uma única sequência ordenada restante
@@ -123,8 +134,19 @@ class Cascata:
         return n
     
     @property
+    def qtdSequenciasReais(self)->int:
+        n = 0
+        for file in self.arquivos:
+            n += file.qtdSequenciasReais
+        return n
+    
+    @property
     def output(self)->str:
         return self._output
+
+    @property
+    def dadosExecucao(self)->DadosExecucao:
+        return self._dadosExecucao
 
     @arquivos.setter
     def arquivos(self, arquivos: list[ArquivoCascata])->None:

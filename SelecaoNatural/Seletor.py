@@ -11,7 +11,7 @@ class Seletor:
         self._output: list[list[int]] = [[]]
         self._remaining: int = len(input) #Número de registros restantes para serem processados
 
-    def selecionar(self)->list[list[int]]:
+    def selecionar(self)->list[list[int]]:#Retorna uma lista de listas de registros ordenados
         while not self._heap.full and len(self._input)>0:
             self._heap.insert(Record(self._input.pop(0)))
         while self._remaining>0:

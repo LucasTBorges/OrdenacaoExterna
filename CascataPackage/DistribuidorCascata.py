@@ -56,7 +56,6 @@ class DistribuidorCascata:
             files.append(ArquivoCascata())
         distribution: list[int] = self.calcDistribution()
         totalSeq:int = sum(distribution) #quantidade total de sequências
-        #qtdFakeSeq:int = totalSeq - len(convertedSequences) #quantidade de sequências falsas a serem adicionadas
         currSeq:SequenciaCascata
         for i in range(totalSeq):
             if len(convertedSequences)>0:
@@ -66,7 +65,7 @@ class DistribuidorCascata:
             index:int =i%self.qtdFiles
             while distribution[index] == 0:
                 index = (index+1)%self.qtdFiles
-            files[index].appendList(currSeq)
+            files[index].appendList(currSeq,True)
             distribution[index] -= 1
         return files
 
