@@ -1,7 +1,7 @@
 import json
 
 class DadosExecucao:
-    def __init__(self, ramSize:int, seqsInic:list[list[int]], qtdArquivos:int)->None:
+    def __init__(self, ramSize:int, qtdArquivos:int, seqsInic:list[list[int]])->None:
         self._ramSize:int = ramSize
         self._qtdArquivos = qtdArquivos
         self._inputSize:int = sum([len(seq) for seq in seqsInic])
@@ -42,6 +42,7 @@ class DadosExecucao:
         return {
             "inputSize": self.inputSize,
             "ramSize": self._ramSize,
+            "qtdArquivos": self._qtdArquivos,
             "betas": self._betas,
             "seqsInic": self._seqsInic,
             "nSeqsInic": self._nSeqsInic,
@@ -63,7 +64,7 @@ class DadosExecucao:
 
     @staticmethod
     def from_dict(dict)-> 'DadosExecucao':
-        dados = DadosExecucao(dict["inputSize"], dict["ramSize"], dict["seqsInic"])
+        dados = DadosExecucao(dict["ramSize"], dict["qtdArquivos"], dict["seqsInic"])
         dados._betas = dict["betas"]
         dados._alpha = dict["alpha"]
         return dados
