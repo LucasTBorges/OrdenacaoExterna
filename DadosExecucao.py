@@ -35,7 +35,7 @@ class DadosExecucao:
         return self._alpha
 
     @property
-    def seqsInic(self)->list[list[int]]
+    def seqsInic(self)->list[list[int]]:
         return self._seqsInic
     
     @alpha.setter
