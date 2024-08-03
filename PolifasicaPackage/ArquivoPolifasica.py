@@ -1,6 +1,6 @@
 class ArquivoPolifasica:
-    def __init__(self, lists: list = []) -> None:
-        self._sequencias = lists
+    def __init__(self, sequencias:list = []) -> None:
+        self._sequencias = list(sequencias)
         self._writeOps = 0
 
     def __str__(self)->str:
