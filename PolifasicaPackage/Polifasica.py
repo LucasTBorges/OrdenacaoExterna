@@ -2,21 +2,33 @@ from PolifasicaPackage.ArquivoPolifasica import ArquivoPolifasica
 from DadosExecucao import DadosExecucao
 
 class Polifasica:
-    def __init__(self, qtdRegistros:int, ramSize:int, arquivos: list[ArquivoPolifasica], nSeqsInic:int = -1):
-        self._qtdRegistros = qtdRegistros
-
-        if nSeqsInic == -1:
-            qtdSeq = 0
-            for arq in arquivos:
-                qtdSeq += arq.qtdSequencias
-
-            self._dadosExec = DadosExecucao(qtdRegistros, ramSize, qtdSeq)
-        else:
-            self._dadosExec = DadosExecucao(qtdRegistros, ramSize, nSeqsInic)
-
-        self._arquivos = arquivos
+    def __init__(self, qtdRegistros:int, ramSize:int, qtdArquivos:int, seqsInic:list):
+        if ramSize < qtdArquivos-1:
+            raise ValueError("Memória principal deve ser maior ou igual ao número de arquivos menos 1")
+        self._dadosExec = DadosExecucao(qtdRegistros, ramSize, seqsInic)
         self._fase = 0
         self._output = ""
+        self._betas = []
+
+        arquivos = []
+        for i in range(0, qtdArquivos-1): #Adiciona k-1 arquivos na lista de arquivos
+            arquivos.append(ArquivoPolifasica())
+
+        indexArquivo = 0
+        indexSequencia = 0
+        while indexSequencia < len(seqsInic):
+            try:
+                arquivos[indexArquivo].appendSequencia(seqsInic[indexSequencia])
+            except:
+                indexArquivo = 0
+                arquivos[indexArquivo].appendSequencia(seqsInic[indexSequencia])
+
+            indexArquivo += 1
+            indexSequencia += 1
+        arquivos.append(ArquivoPolifasica()) #Adiciona o k-ésimo arquivo (vazio) na lista de arquivos
+
+        self._arquivos = arquivos
+
 
     def __str__(self)->str:
         return str([arq.sequencias for arq in self._arquivos])
@@ -35,6 +47,10 @@ class Polifasica:
         return self._output
 
     @property
+    def dadosExecucao(self) -> DadosExecucao:
+        return self._dadosExec
+
+    @property
     def qtdSequencias(self) -> int:
         n = 0
         for arq in self.arquivos:
@@ -43,7 +59,7 @@ class Polifasica:
 
     @property
     def qtdRegistros(self) -> int:
-        return self._qtdRegistros
+        return self._dadosExec.inputSize
 
     @property
     def avgSeqSize(self) -> float:
@@ -73,17 +89,20 @@ class Polifasica:
 
         
     def polifasear(self):
-        self._output += f"fase: {self._fase} {self.avgSeqSize:.2f}\n"
+        beta = f"{self.avgSeqSize:.2f}"
+        self._dadosExec.betas.append(beta)
+        self._output += f"fase: {self._fase} {beta}\n"
         for i in range(0, len(self._arquivos)):
             self._output += f"{i+1}: {self._arquivos[i]}\n"
         self._fase += 1
+
         while not self.completo:
             target_file = None
             for file in self._arquivos:
                 if file.isEmpty:
                     target_file = file
             if target_file is None:
-                raise Exception("Tentativa de executar cascata falhou pois todos os arquivos estavam ocupados")
+                raise Exception("Tentativa de executar polifásica falhou pois todos os arquivos estavam ocupados")
 
             arquivos = [arq for arq in self._arquivos if not arq.isEmpty and arq != target_file]
             while (all([not arq.isEmpty for arq in arquivos])):
@@ -94,7 +113,9 @@ class Polifasica:
                     if arq != target_file and len(arq.sequencias) > 0:
                         arq.sequencias.pop(0)
 
-            self._output += f"fase: {self._fase} {self.avgSeqSize:.2f}\n"
+            beta = f"{self.avgSeqSize:.2f}"
+            self._dadosExec.betas.append(beta)
+            self._output += f"fase: {self._fase} {beta}\n"
             for i in range(0, len(self._arquivos)):
                 self._output += f"{i+1}: {self._arquivos[i]}\n"
             self._fase += 1
