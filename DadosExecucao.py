@@ -34,6 +34,10 @@ class DadosExecucao:
     def alpha(self)->float:
         return self._alpha
 
+    @property
+    def seqsInic(self)->list[list[int]
+        return self._seqsInic
+    
     @alpha.setter
     def alpha(self, alpha:float)->None:
         self._alpha = alpha
