@@ -34,7 +34,7 @@ class Polifasica:
         return str([arq.sequencias for arq in self._arquivos])
 
     @property
-    def completo(self):
+    def completo(self)->bool:
         arquivos = [arq for arq in self._arquivos if not arq.isEmpty]
         return len(arquivos) == 1 and len(arquivos[0].sequencias) == 1
 
@@ -43,33 +43,33 @@ class Polifasica:
         return self._arquivos
 
     @property
-    def output(self) -> str:
+    def output(self)->str:
         return self._output
 
     @property
-    def dadosExecucao(self) -> DadosExecucao:
+    def dadosExecucao(self)->DadosExecucao:
         return self._dadosExec
 
     @property
-    def qtdSequencias(self) -> int:
+    def qtdSequencias(self)->int:
         n = 0
         for arq in self.arquivos:
             n += arq.qtdSequencias
         return n
 
     @property
-    def qtdRegistros(self) -> int:
+    def qtdRegistros(self)->int:
         return self._dadosExec.inputSize
 
     @property
-    def avgSeqSize(self) -> float:
+    def avgSeqSize(self)->float:
         if self.qtdSequencias == 0:
             raise ZeroDivisionError("Quantidade de sequências é zero, impossível calcular beta")
         if self._dadosExec.ramSize == 0:
             raise ZeroDivisionError("Tamanho da memória principal é zero, impossível calcular beta")
         return round(self.qtdRegistros/(self.qtdSequencias*self._dadosExec.ramSize), 2)
 
-    def addToOutput(self) -> None:
+    def addToOutput(self)->None:
         beta = self.avgSeqSize
         self._dadosExec.betas.append(beta)
         self._output += f"fase: {self._fase} {beta}\n"
@@ -77,7 +77,7 @@ class Polifasica:
             self._output += f"{i+1}: {self._arquivos[i]}\n"
         self._fase += 1
 
-    def setAlpha(self) -> None:
+    def setAlpha(self)->None:
         writeOpsTotal = 0
         for arq in self._arquivos:
             writeOpsTotal += arq.writeOps
@@ -85,7 +85,7 @@ class Polifasica:
         alpha = round((writeOpsTotal / self._dadosExec.inputSize), 2)
         self._dadosExec.alpha = alpha
 
-    def ordenarSequencias(self, sequencias: list):
+    def ordenarSequencias(self, sequencias:list[list[int]])->list[list[int]]:
         new_ordered_list = []
         index = [0] * len(sequencias)
 
@@ -104,7 +104,7 @@ class Polifasica:
         return new_ordered_list
 
         
-    def polifasear(self):
+    def polifasear(self)->None:
         self.addToOutput()
 
         while not self.completo:

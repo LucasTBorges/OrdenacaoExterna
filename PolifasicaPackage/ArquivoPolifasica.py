@@ -41,7 +41,7 @@ class ArquivoPolifasica:
     def appendSequencia(self, sequencia:list[int])->None:
         self._sequencias.append(sequencia)
 
-    def appendElemento(self, value:int):
+    def appendElemento(self, value:int)->None:
         if len(self._sequencias)>0:
             self._sequencias[-1].append(value)
             self._writeOps += 1
@@ -49,7 +49,7 @@ class ArquivoPolifasica:
             self._sequencias.append([value])
             self._writeOps += 1
 
-    def appendSequencia(self, lista:list):
+    def appendSequencia(self, lista:list)->None:
         self._sequencias.append(lista)
         self._writeOps += len(lista)
 
