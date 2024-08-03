@@ -89,7 +89,7 @@ class Polifasica:
 
         
     def polifasear(self):
-        beta = f"{self.avgSeqSize:.2f}"
+        beta = round(self.avgSeqSize, 2)
         self._dadosExec.betas.append(beta)
         self._output += f"fase: {self._fase} {beta}\n"
         for i in range(0, len(self._arquivos)):
@@ -113,10 +113,20 @@ class Polifasica:
                     if arq != target_file and len(arq.sequencias) > 0:
                         arq.sequencias.pop(0)
 
-            beta = f"{self.avgSeqSize:.2f}"
+            beta = round(self.avgSeqSize, 2)
             self._dadosExec.betas.append(beta)
             self._output += f"fase: {self._fase} {beta}\n"
             for i in range(0, len(self._arquivos)):
                 self._output += f"{i+1}: {self._arquivos[i]}\n"
             self._fase += 1
+
+        self.setAlpha()
+
+    def setAlpha(self) -> None:
+        writeOpsTotal = 0
+        for arq in self._arquivos:
+            writeOpsTotal += arq.writeOps
+
+        alpha = round((writeOpsTotal / self._dadosExec.inputSize), 2)
+        self._dadosExec.alpha = alpha
     
