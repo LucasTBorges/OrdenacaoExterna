@@ -69,6 +69,22 @@ class Polifasica:
             raise ZeroDivisionError("Tamanho da memória principal é zero, impossível calcular beta")
         return round(self.qtdRegistros/(self.qtdSequencias*self._dadosExec.ramSize), 2)
 
+    def addToOutput(self) -> None:
+        beta = self.avgSeqSize
+        self._dadosExec.betas.append(beta)
+        self._output += f"fase: {self._fase} {beta}\n"
+        for i in range(0, len(self._arquivos)):
+            self._output += f"{i+1}: {self._arquivos[i]}\n"
+        self._fase += 1
+
+    def setAlpha(self) -> None:
+        writeOpsTotal = 0
+        for arq in self._arquivos:
+            writeOpsTotal += arq.writeOps
+
+        alpha = round((writeOpsTotal / self._dadosExec.inputSize), 2)
+        self._dadosExec.alpha = alpha
+
     def ordenarSequencias(self, sequencias: list):
         new_ordered_list = []
         index = [0] * len(sequencias)
@@ -89,12 +105,7 @@ class Polifasica:
 
         
     def polifasear(self):
-        beta = self.avgSeqSize
-        self._dadosExec.betas.append(beta)
-        self._output += f"fase: {self._fase} {beta}\n"
-        for i in range(0, len(self._arquivos)):
-            self._output += f"{i+1}: {self._arquivos[i]}\n"
-        self._fase += 1
+        self.addToOutput()
 
         while not self.completo:
             target_file = None
@@ -113,20 +124,7 @@ class Polifasica:
                     if arq != target_file and len(arq.sequencias) > 0:
                         arq.sequencias.pop(0)
 
-            beta = self.avgSeqSize
-            self._dadosExec.betas.append(beta)
-            self._output += f"fase: {self._fase} {beta}\n"
-            for i in range(0, len(self._arquivos)):
-                self._output += f"{i+1}: {self._arquivos[i]}\n"
-            self._fase += 1
+            self.addToOutput()
 
         self.setAlpha()
-
-    def setAlpha(self) -> None:
-        writeOpsTotal = 0
-        for arq in self._arquivos:
-            writeOpsTotal += arq.writeOps
-
-        alpha = round((writeOpsTotal / self._dadosExec.inputSize), 2)
-        self._dadosExec.alpha = alpha
     
