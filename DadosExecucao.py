@@ -1,11 +1,12 @@
 import json
 
 class DadosExecucao:
-    def __init__(self, inputSize:int, ramSize:int, seqsInic:list)->None:
-        self._inputSize:int = inputSize
+    def __init__(self, ramSize:int, seqsInic:list[list[int]], qtdArquivos:int)->None:
         self._ramSize:int = ramSize
+        self._qtdArquivos = qtdArquivos
+        self._inputSize:int = sum([len(seq) for seq in seqsInic])
         self._betas:list[float] = []
-        self._seqsInic = seqsInic #Sequências iniciais
+        self._seqsInic = list(seqsInic) #Sequências iniciais
         self._nSeqsInic:int = len(seqsInic) #Número de sequências iniciais
         self._alpha:float #Fator alfa, definido ao fim da ordenação
 
@@ -16,6 +17,10 @@ class DadosExecucao:
     @property
     def ramSize(self)->int:
         return self._ramSize
+    
+    @property
+    def qtdArquivos(self)->int:
+        return self._qtdArquivos
     
     @property
     def betas(self)->list[float]:
