@@ -67,7 +67,7 @@ class Polifasica:
             raise ZeroDivisionError("Quantidade de sequências é zero, impossível calcular beta")
         if self._dadosExec.ramSize == 0:
             raise ZeroDivisionError("Tamanho da memória principal é zero, impossível calcular beta")
-        return self.qtdRegistros/(self.qtdSequencias*self._dadosExec.ramSize)
+        return round(self.qtdRegistros/(self.qtdSequencias*self._dadosExec.ramSize), 2)
 
     def ordenarSequencias(self, sequencias: list):
         new_ordered_list = []
@@ -89,7 +89,7 @@ class Polifasica:
 
         
     def polifasear(self):
-        beta = round(self.avgSeqSize, 2)
+        beta = self.avgSeqSize
         self._dadosExec.betas.append(beta)
         self._output += f"fase: {self._fase} {beta}\n"
         for i in range(0, len(self._arquivos)):
@@ -113,7 +113,7 @@ class Polifasica:
                     if arq != target_file and len(arq.sequencias) > 0:
                         arq.sequencias.pop(0)
 
-            beta = round(self.avgSeqSize, 2)
+            beta = self.avgSeqSize
             self._dadosExec.betas.append(beta)
             self._output += f"fase: {self._fase} {beta}\n"
             for i in range(0, len(self._arquivos)):
