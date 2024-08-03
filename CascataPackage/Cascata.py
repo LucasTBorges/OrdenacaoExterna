@@ -2,17 +2,23 @@ from CascataPackage.ArquivoCascata import ArquivoCascata
 from CascataPackage.HeapCascata import HeapCascata
 from CascataPackage.Intercalador import Intercalador
 from DadosExecucao import DadosExecucao
+from CascataPackage.DistribuidorCascata import DistribuidorCascata
 
 class Cascata:
-    def __init__(self, arquivos: list[ArquivoCascata], ramSize: int)->None:
-        if ramSize < len(arquivos)-1:
+    def __init__(self, input:list[list[int]], ramSize: int, qtdFiles: int, ordered=False)->None: #Parâmetro ordered indica se há certeza de que as sequências iniciais estão ordenadas e portanto não deve haver uma checagem de ordenação
+        if ramSize < qtdFiles-1:
             raise ValueError("Memória principal deve ser maior ou igual ao número de arquivos menos 1")
-        self._arquivos:list[ArquivoCascata] = arquivos #Lista de arquivos
+        distribuidor = DistribuidorCascata(input, qtdFiles)
+        self._arquivos:list[ArquivoCascata] = distribuidor.distributeSequences(ordered) #Lista de arquivos
         self._fase:int = 0 #Fase atual
         self._ram:HeapCascata = HeapCascata(ramSize) #Memória principal
         self._qtdRegistros:int|None = None #Quantidade de registros, calculado quando chamado pela primeira vez
         self._output:str = "" #String de saída
-        self._dadosExecucao:DadosExecucao = DadosExecucao(self.qtdRegistros, ramSize, self.qtdSequenciasReais) #Dado de execução (ATENÇÃO: Não conta sequências falsas no número de sequências iniciais, apenas as sequências do input)
+        self._dadosExecucao:DadosExecucao = DadosExecucao(ramSize, qtdFiles, input)
+
+    @staticmethod
+    def loadFromDados(dados:DadosExecucao)->'Cascata': #Carrega uma instância de Cascata a partir de um objeto DadosExecucao
+        return Cascata(dados.seqsInic, dados.ramSize, dados.qtdArquivos)
 
     def run(self)->str: #Executa a ordenação
         self.addToOutput()
