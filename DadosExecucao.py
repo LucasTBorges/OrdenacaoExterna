@@ -1,11 +1,12 @@
 import json
 
 class DadosExecucao:
-    def __init__(self, inputSize:int, ramSize:int, nSeqsInic:int)->None:
+    def __init__(self, inputSize:int, ramSize:int, seqsInic:list)->None:
         self._inputSize:int = inputSize
         self._ramSize:int = ramSize
         self._betas:list[float] = []
-        self._nSeqsInic:int = nSeqsInic #Número de sequências iniciais
+        self._seqsInic = seqsInic #Sequências iniciais
+        self._nSeqsInic:int = len(seqsInic) #Número de sequências iniciais
         self._alpha:int #Fator alfa, definido ao fim da ordenação
 
     @property
@@ -37,6 +38,7 @@ class DadosExecucao:
             "inputSize": self.inputSize,
             "ramSize": self._ramSize,
             "betas": self._betas,
+            "seqsInic": self._seqsInic,
             "nSeqsInic": self._nSeqsInic,
             "alpha": self._alpha
         }
@@ -56,7 +58,7 @@ class DadosExecucao:
 
     @staticmethod
     def from_dict(dict)-> 'DadosExecucao':
-        dados = DadosExecucao(dict["inputSize"], dict["ramSize"], dict["nSeqsInic"])
+        dados = DadosExecucao(dict["inputSize"], dict["ramSize"], dict["seqsInic"])
         dados._betas = dict["betas"]
         dados._alpha = dict["alpha"]
         return dados
