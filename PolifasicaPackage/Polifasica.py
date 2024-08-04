@@ -77,7 +77,7 @@ class Polifasica:
 
         while any(index[i] < len(sequencias[i]) for i in range(len(sequencias))):
             min_val = float('inf')
-            min_idx = None
+            min_idx = 0
 
             for i in range(len(sequencias)):
                 if index[i] < len(sequencias[i]) and sequencias[i][index[i]] < min_val:
@@ -100,7 +100,7 @@ class Polifasica:
 
         arquivos = [arq for arq in self._arquivos if not arq.isEmpty and arq != target_file]
         while (all([not arq.isEmpty for arq in arquivos])):
-            sequencias = [arq.sequencias[0] for arq in arquivos]
+            sequencias = [arq.sequencias[0] for arq in arquivos if arq.sequencias[0][0] != "*"]
             sequencia_ordenada = self.ordenarSequencias(sequencias)
             target_file.appendSequencia(sequencia_ordenada)
             for arq in self._arquivos:

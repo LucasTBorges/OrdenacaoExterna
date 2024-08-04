@@ -56,7 +56,7 @@ class DistribuidorPolifasica:
                     seqs.append(self._seqsInic[indexSeqAtual])
                     indexSeqAtual += 1
                 except:
-                    seqs.append([-1])
+                    seqs.append(["*"])
 
             arquivos.append(ArquivoPolifasica(seqs))
 
