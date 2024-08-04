@@ -1,3 +1,5 @@
+from PolifasicaPackage.ArquivoPolifasica import ArquivoPolifasica
+
 class DistribuidorPolifasica:
     def __init__(self, qtdArquivos:int, seqsInic:list[list[int]]):
         self._qtdArquivos = qtdArquivos
@@ -40,3 +42,22 @@ class DistribuidorPolifasica:
                     indexmaiorArquivo = i
 
             self.nextStep(maiorArquivo, indexmaiorArquivo)
+
+    def criarArquivos(self)->list[ArquivoPolifasica]:
+        self.reversePolifase()
+
+        arquivos:list[ArquivoPolifasica] = []
+        indexSeqAtual = 0
+        for i in range(self._qtdArquivos):
+            seqs:list[list[int]] = []
+            qtdSeqs:int = self._lastStep[i]
+            for _ in range(qtdSeqs):
+                try:
+                    seqs.append(self._seqsInic[indexSeqAtual])
+                    indexSeqAtual += 1
+                except:
+                    seqs.append([-1])
+
+            arquivos.append(ArquivoPolifasica(seqs))
+
+        return arquivos
