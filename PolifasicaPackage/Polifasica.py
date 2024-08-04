@@ -84,6 +84,7 @@ class Polifasica:
 
         alpha = round((writeOpsTotal / self._dadosExec.inputSize), 2)
         self._dadosExec.alpha = alpha
+        self._output += f"\nα = {alpha:.2f}"
 
     def ordenarSequencias(self, sequencias:list[list[int]])->list[list[int]]:
         new_ordered_list = []
