@@ -4,10 +4,13 @@ class ArquivoPolifasica:
         self._writeOps = 0
 
     def __str__(self)->str:
-        string = "{"
+        string = ""
         for seq in self._sequencias:
-            string += str(seq)
-        string += "}"
+            string += "{"
+            for value in seq:
+                string += f"{value}, "
+            string = string[:-2]
+            string += "}"
         return string
 
     @property
