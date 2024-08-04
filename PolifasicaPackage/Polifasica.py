@@ -57,7 +57,7 @@ class Polifasica:
     def addToOutput(self)->None:
         beta = self.avgSeqSize
         self._dadosExec.betas.append(beta)
-        self._output += f"fase: {self._fase} {beta}\n"
+        self._output += f"fase {self._fase} {beta}\n"
         for i in range(0, len(self._arquivos)):
             self._output += f"{i+1}: {self._arquivos[i]}\n"
         self._fase += 1
@@ -69,7 +69,7 @@ class Polifasica:
 
         alpha = round((writeOpsTotal / self._dadosExec.inputSize), 2)
         self._dadosExec.alpha = alpha
-        self._output += f"\nα = {alpha:.2f}"
+        self._output += f"\nfinal {alpha:.2f}"
 
     def ordenarSequencias(self, sequencias:list[list[int]])->list[list[int]]:
         new_ordered_list = []
