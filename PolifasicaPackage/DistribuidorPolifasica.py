@@ -5,6 +5,10 @@ class DistribuidorPolifasica:
         self._qtdSeqsArquivo:list[int] = [0]*(qtdArquivos-1) + [1] #Configuração dos arquivos (quantidade de sequencias em cada um)
         self._steps:list[list[int]] = [list(self._qtdSeqsArquivo)]
 
+    @property
+    def steps(self)->list[list[int]]:
+        return list(self._steps)
+
     def addStep(self)->None:
         self._steps.append(list(self._qtdSeqsArquivo))
 
