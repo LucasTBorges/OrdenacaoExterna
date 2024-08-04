@@ -11,12 +11,12 @@ class Polifasica:
         self._betas = []
 
         arquivos = []
-        for i in range(0, qtdArquivos-1): #Adiciona k-1 arquivos na lista de arquivos
+        for i in range(0, qtdArquivos-1): #Adiciona k-1 arquivos vazios na lista de arquivos
             arquivos.append(ArquivoPolifasica())
 
         indexArquivo = 0
         indexSequencia = 0
-        while indexSequencia < len(seqsInic):
+        while indexSequencia < len(seqsInic): #Distribui as sequencias iniciais nos k-1 arquivos
             try:
                 arquivos[indexArquivo].appendSequencia(seqsInic[indexSequencia])
             except:
