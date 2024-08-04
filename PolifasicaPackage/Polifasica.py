@@ -106,26 +106,28 @@ class Polifasica:
 
         
     def polifasear(self)->None:
-        self.addToOutput()
+        target_file = None
+        for file in self._arquivos:
+            if file.isEmpty:
+                target_file = file
+        if target_file is None:
+            raise Exception("Tentativa de executar polifásica falhou pois todos os arquivos estavam ocupados")
+
+        arquivos = [arq for arq in self._arquivos if not arq.isEmpty and arq != target_file]
+        while (all([not arq.isEmpty for arq in arquivos])):
+            sequencias = [arq.sequencias[0] for arq in arquivos]
+            sequencia_ordenada = self.ordenarSequencias(sequencias)
+            target_file.appendSequencia(sequencia_ordenada)
+            for arq in self._arquivos:
+                if arq != target_file and len(arq.sequencias) > 0:
+                    arq.sequencias.pop(0)
+
+    def run(self)->None:
+        self.addToOutput() #Adiciona a fase 0 ao outout
 
         while not self.completo:
-            target_file = None
-            for file in self._arquivos:
-                if file.isEmpty:
-                    target_file = file
-            if target_file is None:
-                raise Exception("Tentativa de executar polifásica falhou pois todos os arquivos estavam ocupados")
-
-            arquivos = [arq for arq in self._arquivos if not arq.isEmpty and arq != target_file]
-            while (all([not arq.isEmpty for arq in arquivos])):
-                sequencias = [arq.sequencias[0] for arq in arquivos]
-                sequencia_ordenada = self.ordenarSequencias(sequencias)
-                target_file.appendSequencia(sequencia_ordenada)
-                for arq in self._arquivos:
-                    if arq != target_file and len(arq.sequencias) > 0:
-                        arq.sequencias.pop(0)
-
-            self.addToOutput()
+            self.polifasear()
+            self.addToOutput() #Adiciona as fases subsequentes
 
         self.setAlpha()
     
