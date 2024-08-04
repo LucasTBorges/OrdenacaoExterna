@@ -1,4 +1,5 @@
 from PolifasicaPackage.ArquivoPolifasica import ArquivoPolifasica
+from PolifasicaPackage.DistribuidorPolifasica import DistribuidorPolifasica
 from DadosExecucao import DadosExecucao
 
 class Polifasica:
@@ -10,24 +11,8 @@ class Polifasica:
         self._output = ""
         self._betas = []
 
-        arquivos = []
-        for i in range(0, qtdArquivos-1): #Adiciona k-1 arquivos vazios na lista de arquivos
-            arquivos.append(ArquivoPolifasica())
-
-        indexArquivo = 0
-        indexSequencia = 0
-        while indexSequencia < len(seqsInic): #Distribui as sequencias iniciais nos k-1 arquivos
-            try:
-                arquivos[indexArquivo].appendSequencia(seqsInic[indexSequencia])
-            except:
-                indexArquivo = 0
-                arquivos[indexArquivo].appendSequencia(seqsInic[indexSequencia])
-
-            indexArquivo += 1
-            indexSequencia += 1
-        arquivos.append(ArquivoPolifasica()) #Adiciona o k-ésimo arquivo (vazio) na lista de arquivos
-
-        self._arquivos = arquivos
+        distribuidor = DistribuidorPolifasica(qtdArquivos, seqsInic)
+        self._arquivos:list[ArquivoPolifasica] = distribuidor.criarArquivos()
 
 
     def __str__(self)->str:
