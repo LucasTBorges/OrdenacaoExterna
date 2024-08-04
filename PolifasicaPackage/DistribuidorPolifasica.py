@@ -3,6 +3,10 @@ class DistribuidorPolifasica:
         self._qtdArquivos = qtdArquivos
         self._seqsInic = seqsInic
         self._qtdSeqsArquivo:list[int] = [0]*(qtdArquivos-1) + [1] #Configuração dos arquivos (quantidade de sequencias em cada um)
+        self._steps:list[list[int]] = [list(self._qtdSeqsArquivo)]
+
+    def addStep(self)->None:
+        self._steps.append(list(self._qtdSeqsArquivo))
 
     def firstStep(self)->None:
         for i in range(self._qtdArquivos):
@@ -11,11 +15,13 @@ class DistribuidorPolifasica:
                 self._qtdSeqsArquivo[i] = 1
             else:
                 self._qtdSeqsArquivo[i] = 0
+        self.addStep()
 
     def nextStep(self, maiorArquivo:int, indexmaiorArquivo:int)->None:
         for i in range(self._qtdArquivos):
             self._qtdSeqsArquivo[i] += maiorArquivo
         self._qtdSeqsArquivo[indexmaiorArquivo] = 0
+        self.addStep()
 
     def reversePolifase(self)->None:
         self.firstStep()
