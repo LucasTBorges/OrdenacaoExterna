@@ -54,16 +54,4 @@ class ArquivoPolifasica:
 
     def appendSequencia(self, lista:list)->None:
         self._sequencias.append(lista)
-        self._writeOps += len(lista)
-
-    # def congela(self)->None:
-    #     if self._congelado:
-    #         raise ValueError("Tentativa de congelar arquivo já congelado")
-    #     self._congelado = True
-
-    # def descongela(self)->None:
-    #     if not self._congelado:
-    #         raise ValueError("Tentativa de descongelar arquivo não congelado")
-    #     self._congelado = False
-
-    
+        self._writeOps += len(lista)    
