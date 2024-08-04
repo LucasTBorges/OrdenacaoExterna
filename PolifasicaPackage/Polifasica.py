@@ -2,7 +2,7 @@ from PolifasicaPackage.ArquivoPolifasica import ArquivoPolifasica
 from DadosExecucao import DadosExecucao
 
 class Polifasica:
-    def __init__(self, qtdRegistros:int, ramSize:int, qtdArquivos:int, seqsInic:list):
+    def __init__(self, ramSize:int, qtdArquivos:int, seqsInic:list):
         if ramSize < qtdArquivos-1:
             raise ValueError("Memória principal deve ser maior ou igual ao número de arquivos menos 1")
         self._dadosExec = DadosExecucao(ramSize, qtdArquivos, seqsInic)
