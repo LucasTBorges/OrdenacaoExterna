@@ -59,7 +59,8 @@ class Polifasica:
         self._dadosExec.betas.append(beta)
         self._output += f"fase {self._fase} {beta}\n"
         for i in range(0, len(self._arquivos)):
-            self._output += f"{i+1}: {self._arquivos[i]}\n"
+            if not self._arquivos[i].isEmpty:
+                self._output += f"{i+1}: {self._arquivos[i]}\n"
         self._fase += 1
 
     def setAlpha(self)->None:

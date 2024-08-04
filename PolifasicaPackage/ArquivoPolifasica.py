@@ -8,8 +8,8 @@ class ArquivoPolifasica:
         for seq in self._sequencias:
             string += "{"
             for value in seq:
-                string += f"{value}, "
-            string = string[:-2]
+                string += f"{value} "
+            string = string[:-1]
             string += "}"
         return string
 
