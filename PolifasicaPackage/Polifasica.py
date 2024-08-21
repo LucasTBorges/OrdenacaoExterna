@@ -108,8 +108,10 @@ class Polifasica:
                 if arq != target_file and len(arq.sequencias) > 0:
                     arq.sequencias.pop(0)
 
-    def run(self)->None:
+    def run(self, beta_test = False)->None:
         self.addToOutput() #Adiciona a fase 0 ao outout
+        if beta_test:
+            return
 
         while not self.completo:
             self.polifasear()
