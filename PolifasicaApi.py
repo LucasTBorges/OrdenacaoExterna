@@ -10,10 +10,10 @@ class PolifasicaApi:
         return polifasica.dadosExecucao
     
     def run(self, seqsInic: list[list[int]], ramSize:int, qtdArquivos:int, beta_test:bool = False)->DadosExecucao:
-        return self._run(ramSize, qtdArquivos, seqsInic, False, beta_test)
+        return self._run(seqsInic, ramSize, qtdArquivos, False, beta_test)
     
     def runAndPrint(self, seqsInic: list[list[int]], ramSize:int, qtdArquivos:int)->DadosExecucao: #Ordena e imprime o resultado
-        return self._run(ramSize, qtdArquivos, seqsInic, True)
+        return self._run(seqsInic, ramSize, qtdArquivos, True)
     
     def runFromDados(self, dados: DadosExecucao)->DadosExecucao:
         return self._run(dados.seqsInic, dados.ramSize, dados.qtdArquivos, False, True)
