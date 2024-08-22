@@ -89,7 +89,7 @@ class DistribuidorCascata:
     @staticmethod
     def stringStep(files:list[int])->str:
         totalSequences:int = sum(files)
-        return "{" + " ".join([DistribuidorCascata.stringFile(file) for file in files]) + "}" + f" ({totalSequences} sequência{"s" if totalSequences != 1 else ''})"
+        return "{" + " ".join([DistribuidorCascata.stringFile(file) for file in files]) + "}" + f" ({totalSequences} sequência{'s' if totalSequences != 1 else ''})"
     
     @staticmethod
     def stringFile(int)->str:
