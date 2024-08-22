@@ -2,15 +2,15 @@ from PolifasicaPackage.Polifasica import Polifasica
 from DadosExecucao import DadosExecucao
 
 class PolifasicaApi:
-    def _run(self, ramSize:int, qtdArquivos:int, seqsInic: list[list[int]], printResult:bool)->DadosExecucao:
+    def _run(self, ramSize:int, qtdArquivos:int, seqsInic: list[list[int]], printResult:bool, beta_test:bool = False)->DadosExecucao:
         polifasica = Polifasica(ramSize, qtdArquivos, seqsInic)
-        polifasica.run()
+        polifasica.run(beta_test)
         if printResult:
             print(polifasica.output)
         return polifasica.dadosExecucao
     
-    def run(self, ramSize:int, qtdArquivos:int, seqsInic: list[list[int]])->DadosExecucao:
-        return self._run(ramSize, qtdArquivos, seqsInic, False)
+    def run(self, ramSize:int, qtdArquivos:int, seqsInic: list[list[int]], beta_test:bool = False)->DadosExecucao:
+        return self._run(ramSize, qtdArquivos, seqsInic, False, beta_test)
     
     def runAndPrint(self, ramSize:int, qtdArquivos:int, seqsInic: list[list[int]])->DadosExecucao: #Ordena e imprime o resultado
         return self._run(ramSize, qtdArquivos, seqsInic, True)

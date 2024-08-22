@@ -84,4 +84,4 @@ class DadosExecucao:
             return dados_list
 
     def __str__(self)->str:
-        return f"inputSize: {self.inputSize}, ramSize: {self.ramSize}, betas: {self.betas}, nSeqsInic: {self.nSeqsInic}, alpha: {self.alpha}"
+        return f"inputSize: {self.inputSize}, ramSize: {self.ramSize}, qtdArquivos:{self.qtdArquivos}, betas: {self.betas}, nSeqsInic: {self.nSeqsInic}, alpha: {self.alpha}"

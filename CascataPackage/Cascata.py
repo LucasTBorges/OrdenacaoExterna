@@ -98,7 +98,7 @@ class Cascata:
             raise ZeroDivisionError("Quantidade de sequências é zero, impossível calcular beta")
         if self.ramSize == 0:
             raise ZeroDivisionError("Tamanho da memória principal é zero, impossível calcular beta")
-        return self.qtdRegistros/(self.qtdSequencias*self.ramSize)
+        return self.qtdRegistros/(self.qtdSequenciasReais*self.ramSize)
 
     @property
     def fase(self)->int:

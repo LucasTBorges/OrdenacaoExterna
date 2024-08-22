@@ -70,7 +70,7 @@ class Polifasica:
 
         alpha = round((writeOpsTotal / self._dadosExec.inputSize), 2)
         self._dadosExec.alpha = alpha
-        self._output += f"\nfinal {alpha:.2f}"
+        self._output += f"final {alpha:.2f}"
 
     def ordenarSequencias(self, sequencias:list[list[int]])->list[list[int]]:
         new_ordered_list = []
@@ -108,8 +108,10 @@ class Polifasica:
                 if arq != target_file and len(arq.sequencias) > 0:
                     arq.sequencias.pop(0)
 
-    def run(self)->None:
+    def run(self, beta_test = False)->None:
         self.addToOutput() #Adiciona a fase 0 ao outout
+        if beta_test:
+            return
 
         while not self.completo:
             self.polifasear()

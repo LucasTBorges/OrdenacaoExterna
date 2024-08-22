@@ -32,7 +32,7 @@ class ArquivoPolifasica:
     def qtdSequencias(self)->int:
         n=0
         for seq in self._sequencias:
-            if len(seq) > 0:
+            if len(seq) > 0 and seq[0] != '*':
                 n += 1
         return n
 
