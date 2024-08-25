@@ -66,7 +66,7 @@ class Balanceada:
             n+=arq.getQtdSequencias
         return n
 
-    @property
+    @property   
     def qtdRegistros(self)->int:
         return self._dadosExec.inputSize
 
@@ -80,10 +80,7 @@ class Balanceada:
 
     @property
     def haveSequence(self)->bool:
-        if self._isOut:
-            arquivos = [arq for arq in self._arquivosEntrada.values()]
-        else:
-            arquivos = [arq for arq in self._arquivosSaida.values()]
+        arquivos = [arq for arq in self._arquivosEntrada.values()]
         
         for arq in arquivos:
             if not arq.isEmpty:
@@ -97,10 +94,8 @@ class Balanceada:
         self._dadosExec.betas.append(beta)
         self._output += f"fase {self._fase} {beta}\n"
 
-        if not self._isOut:
-            arquivos:dict[int: ArquivoBalanceada] = self._arquivosSaida
-        else:
-            arquivos:dict[int: ArquivoBalanceada] = self._arquivosEntrada
+
+        arquivos:dict[int: ArquivoBalanceada] = self._arquivosEntrada
         for i in arquivos:
             if not arquivos[i].isEmpty:
                 self._output += f"{i}: {arquivos[i]}\n"
@@ -125,18 +120,9 @@ class Balanceada:
         return new_ordered_list
     
     def balancear(self)->None:
-
-        arquivos:list[ArquivoBalanceada] = []
-        target: list[ArquivoBalanceada] = []
-
-        if self._isOut:
-            arquivos = [arq for arq in self._arquivosEntrada.values()]
-            target = [arq for arq in self._arquivosSaida.values()]
+        arquivos = [arq for arq in self._arquivosEntrada.values()]
+        target = [arq for arq in self._arquivosSaida.values()]
         
-        else:
-            arquivos = [arq for arq in self._arquivosSaida.values()]
-            target = [arq for arq in self._arquivosEntrada.values()]
-
         index = 0
         while(self.haveSequence):
             sequencias = []
@@ -159,6 +145,8 @@ class Balanceada:
             index= (index+1)%len(arquivos)
         
         self._isOut = not self._isOut
+
+        [self._arquivosEntrada, self._arquivosSaida] = [self._arquivosSaida, self._arquivosEntrada]
             
         
 
