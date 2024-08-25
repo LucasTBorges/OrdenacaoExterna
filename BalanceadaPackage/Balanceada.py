@@ -8,7 +8,6 @@ class Balanceada:
         distribuidor = DistribuidorBalanceada(qtdArquivos, seqsInic)
         self._arquivosEntrada:dict[int: ArquivoBalanceada] = distribuidor.criarArquivosEntrada()
         self._arquivosSaida:dict[int: ArquivoBalanceada] = distribuidor.criarArquivosSaida()
-        self._isOut = True
 
         self._alpha = 0.0
         
@@ -127,24 +126,13 @@ class Balanceada:
         while(self.haveSequence):
             sequencias = []
             for arq in arquivos:
-                if not arq.isEmpty:
-                    while(len(arq.getSequencias[0]) == 0):
-                        arq.removeSequencia(0)    
+                if not arq.isEmpty:   
                     sequencias.append(arq.getSequencias[0])
-
-
+                    arq.removeSequencia(0)
             sequencia_ordenada = self.intercalar(sequencias)
             target[index].appendNewSequencia(sequencia_ordenada)
-
-
-
-            for arq in arquivos:
-                if not arq.isEmpty:
-                    arq.removeSequencia(0)
-
             index= (index+1)%len(arquivos)
         
-        self._isOut = not self._isOut
 
         [self._arquivosEntrada, self._arquivosSaida] = [self._arquivosSaida, self._arquivosEntrada]
             
