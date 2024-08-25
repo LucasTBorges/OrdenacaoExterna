@@ -1,13 +1,13 @@
-from PolifasicaPackage.Polifasica import Polifasica
+from BalanceadaPackage.Balanceada import Balanceada
 from DadosExecucao import DadosExecucao
 
-class PolifasicaApi:
+class BalanceadaApi:
     def _run(self, seqsInic: list[list[int]], ramSize:int, qtdArquivos:int, printResult:bool, beta_test:bool = False)->DadosExecucao:
-        polifasica = Polifasica(ramSize, qtdArquivos, seqsInic)
-        polifasica.run(beta_test)
+        balanceada = Balanceada(ramSize, qtdArquivos, seqsInic)
+        balanceada.run()
         if printResult:
-            print(polifasica.output)
-        return polifasica.dadosExecucao
+            print(balanceada.output)
+        return balanceada.dadosExecucao
     
     def run(self, seqsInic: list[list[int]], ramSize:int, qtdArquivos:int, beta_test:bool = False)->DadosExecucao:
         return self._run(seqsInic, ramSize, qtdArquivos, False, beta_test)
