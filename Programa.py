@@ -1,14 +1,14 @@
 from PolifasicaApi import PolifasicaApi
 from CascataApi import CascataApi
-# from PCaminhosAPI import PCaminhosAPI
+from BalanceadaApi import BalanceadaApi
 from SelecaoNatural.Seletor import Seletor
+
 
 def programa():
     metodo = input()
     match metodo:
         case 'B':
-            print("Escolhe outro na moral")
-            return
+            api = BalanceadaApi()
         case 'P':
             api = PolifasicaApi()
         case 'C':
@@ -29,3 +29,4 @@ def programa():
 while True:
     programa()
     print()
+
