@@ -22,7 +22,6 @@ def programa():
 
     initaL_seqs = Seletor(values, m).selecionar(r)
 
-    print(initaL_seqs)
 
     api.runAndPrint(initaL_seqs, m, k)
 
